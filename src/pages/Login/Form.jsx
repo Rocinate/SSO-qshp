@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import LoadingButton from "@mui/lab/LoadingButton";
 import {
   Box,
   Typography,
@@ -16,9 +17,9 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { useEffect } from "react";
 
 const Form = (props) => {
-  const { login } = props;
+  const { login, errorText, setErrorText } = props;
 
-  const [tab, setTab] = useState("1");
+  const [tab, setTab] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
   const [token, setToken] = useState(null);
   const { register, handleSubmit } = useForm();
@@ -26,7 +27,6 @@ const Form = (props) => {
   const site_key = import.meta.env.PROD
     ? import.meta.env.VITE_RECAPTCHA_KEY_PRODUCTION
     : import.meta.env.VITE_RECAPTCHA_KEY;
-  // const { isLoading, isSuccess, isError, data, error} = useQuery('login', login, )
 
   const handleTabChange = (event, value) => {
     setTab(value);
@@ -38,6 +38,14 @@ const Form = (props) => {
 
   const onTokenChange = (value) => {
     setToken(value);
+  };
+
+  const handleLogin = (data) => {
+    if (token == null) {
+      setErrorText("请先进行人机身份认证");
+      return;
+    }
+    login(data, token);
   };
 
   useEffect(() => {
@@ -63,23 +71,19 @@ const Form = (props) => {
         <Box className="border-b border-b-slate-300">
           <Tabs value={tab} onChange={handleTabChange} centered>
             <Tab
-              value="1"
+              value={1}
               label={<Typography>统一身份认证</Typography>}
               className="font-extrabold"
             />
             <Tab
-              value="2"
+              value={2}
               label={<Typography>账号密码登录</Typography>}
               className="font-extrabold"
             />
           </Tabs>
         </Box>
 
-        <form
-          onSubmit={handleSubmit((data) =>
-            login(Object.assign(data, { token: token }))
-          )}
-        >
+        <form onSubmit={handleSubmit((data) => handleLogin(data))}>
           <div className="py-2 pt-8">
             <TextField
               fullWidth
@@ -95,7 +99,7 @@ const Form = (props) => {
               {...register("user")}
             />
           </div>
-          <div className="py-2">
+          <div className="py-2 pb-4">
             <TextField
               fullWidth
               required
@@ -118,12 +122,26 @@ const Form = (props) => {
               {...register("password")}
             />
           </div>
-          <div className="flex justify-between pb-4">
-            <Typography
-              className="my-8 cursor-pointer"
-              style={{ color: "#1790fe" }}
+          <div style={{ height: "102px" }}>
+            <div
+              style={{
+                transform: "scale(1.3157)",
+                transformOrigin: "0 0",
+              }}
             >
-              <Link to='/register'>注册</Link>
+              <ReCAPTCHA sitekey={site_key} onChange={onTokenChange} />
+            </div>
+          </div>
+          <Typography className="text-red-500">{errorText}</Typography>
+          <div className="flex justify-between pt-2 pb-4">
+            <Typography className="my-8 cursor-pointer">
+              <span style={{ color: "#1790fe" }}>
+                <Link to="/register">注册</Link>
+              </span>{" "}
+              /{" "}
+              <span style={{ color: "#1790fe" }}>
+                <Link to="/rebind">毕业生换绑</Link>
+              </span>
             </Typography>
             <Typography
               className="my-8 cursor-pointer"
@@ -132,21 +150,23 @@ const Form = (props) => {
               忘记密码 ?
             </Typography>
           </div>
-          <div
-            style={{
-              transform: "scale(1.3157)",
-              transformOrigin: "0 0",
-              height: "103px",
-            }}
-          >
-            <ReCAPTCHA sitekey={site_key} onChange={onTokenChange} />
-          </div>
-          <input
+          <LoadingButton
+            loading={isLoading}
             type="submit"
+            size="large"
+            variant="contained"
+            className="w-full cursor-pointer"
+            style={{ paddingTop: "0.75rem", paddingBottom: "0.75rem" }}
+          >
+            登 录
+          </LoadingButton>
+          {/* <input
+            type="submit"
+
             className="w-full my-2 py-3 text-white cursor-pointer"
             style={{ backgroundColor: "#1790fe", borderRadius: "4px" }}
             value="登  录"
-          />
+          /> */}
         </form>
       </Box>
     </>

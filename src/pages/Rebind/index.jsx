@@ -23,6 +23,9 @@ const Register = (props) => {
   const [token, setToken] = useState(null);
   const { register, handleSubmit } = useForm();
 
+  const site_key = import.meta.env.PROD
+    ? import.meta.env.VITE_RECAPTCHA_KEY_PRODUCTION
+    : import.meta.env.VITE_RECAPTCHA_KEY;
   // const { isLoading, isSuccess, isError, data, error} = useQuery('login', login, )
 
   const handleTabChange = (event, value) => {
@@ -74,7 +77,7 @@ const Register = (props) => {
             <TextField
               fullWidth
               required
-              label={tab == "1" ? "学号" : "用户名"}
+              label="用户名"
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -82,7 +85,7 @@ const Register = (props) => {
                   </InputAdornment>
                 ),
               }}
-              {...register("user")}
+              {...register("username")}
             />
           </div>
           <div className="py-2">
@@ -107,6 +110,64 @@ const Register = (props) => {
               }}
               {...register("password")}
             />
+          </div>
+          <div className="py-2">
+            <TextField
+              fullWidth
+              required
+              label="(新)统一身份认证账号"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Person />
+                  </InputAdornment>
+                ),
+              }}
+              {...register("student_id")}
+            />
+          </div>
+          <div className="py-2 pb-4">
+            <TextField
+              fullWidth
+              required
+              label="(新)统一身份认证密码"
+              type={showPassword ? "" : "password"}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Https />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={handlePasswordClick} edge="end">
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              {...register("student_password")}
+            />
+          </div>
+          <div style={{ height: "102px" }}>
+            <div
+              style={{
+                transform: "scale(1.3157)",
+                transformOrigin: "0 0",
+              }}
+            >
+              <ReCAPTCHA sitekey={site_key} onChange={onTokenChange} />
+            </div>
+          </div>
+          <div className="flex justify-between pt-2">
+            <Typography
+              className="my-8 cursor-pointer"
+              // style={{ color: "#1790fe" }}
+            >
+              <span style={{ color: "#1790fe" }}>
+                <Link to="/">已有帐号？</Link>
+              </span>
+            </Typography>
           </div>
           <input
             type="submit"

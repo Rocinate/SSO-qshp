@@ -2,7 +2,7 @@ import { LinearProgress } from "@mui/material";
 import { useState } from "react";
 import bgImg from "@/assets/login-bg1.jpg";
 import { Routes, Route, useLocation } from "react-router-dom";
-import routes from '@/route'
+import routes from "@/route";
 
 const Clause = () => {
   return (
@@ -10,14 +10,14 @@ const Clause = () => {
       className="absolute bottom-1 right-1 flex text-white"
       style={{ fontSize: "14px" }}
     >
-      <p className="mx-2">使用条款</p>
-      <p className="mx-2">隐私和cookie</p>
+      <p className="mx-2 cursor-pointer">使用条款</p>
+      <p className="mx-2 cursor-pointer">隐私和cookie</p>
     </div>
   );
 };
 
 const Layout = () => {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   return (
     <div className="flex h-full">

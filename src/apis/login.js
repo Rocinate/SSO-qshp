@@ -1,11 +1,12 @@
 import request from '@/utils/request';
 
-const commonUrl = 'sso'
+const commonUrl = 'login'
 
-const login = async (params) => {
-    return await request.post(`${commonUrl}/login}`, params)
+export const authenticate = async (params, token) => {
+    request.defaults.headers.common["reCAPTCHA"] = token
+    return await request.post(`${commonUrl}/authenticate}`, params)
 }
 
-export default {
-    login
+export const signIn = async (params) => {
+    return await request.post(`${commonUrl}/sign-in}`, params)
 }

@@ -9,6 +9,7 @@ import {
   Tabs,
   IconButton,
   InputAdornment,
+  Checkbox,
 } from "@mui/material";
 import { Person, Https, Visibility, VisibilityOff } from "@mui/icons-material";
 
@@ -21,6 +22,7 @@ const Register = (props) => {
   const [tab, setTab] = useState("1");
   const [showPassword, setShowPassword] = useState(false);
   const [token, setToken] = useState(null);
+  const [checked, setChecked] = useState(false);
   const { register, handleSubmit } = useForm();
 
   const site_key = import.meta.env.PROD
@@ -63,7 +65,7 @@ const Register = (props) => {
           <Tabs value={tab} onChange={handleTabChange} centered>
             <Tab
               value="1"
-              label={<Typography>注册</Typography>}
+              label={<Typography>统一身份认证注册</Typography>}
               className="font-extrabold"
             />
           </Tabs>
@@ -78,7 +80,7 @@ const Register = (props) => {
             <TextField
               fullWidth
               required
-              label={tab == "1" ? "学号" : "用户名"}
+              label="学号"
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -112,12 +114,56 @@ const Register = (props) => {
               {...register("password")}
             />
           </div>
-          <div className="flex justify-between pb-4">
-              <Typography
-                className="my-8 "
-              >
-                我同意<span className="cursor-pointer" style={{ color: "#1790fe" }}></span>
-              </Typography>
+          <div className="py-2 pb-4">
+            <TextField
+              fullWidth
+              required
+              label="邮箱"
+              type={showPassword ? "" : "password"}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Https />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={handlePasswordClick} edge="end">
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              {...register("password")}
+            />
+          </div>
+          <div style={{ height: "102px" }}>
+            <div
+              style={{
+                transform: "scale(1.3157)",
+                transformOrigin: "0 0",
+              }}
+            >
+              <ReCAPTCHA sitekey={site_key} onChange={onTokenChange} />
+            </div>
+          </div>
+          <Typography className="my-8 ">
+            <Checkbox
+              checked={checked}
+              onChange={(event) => setChecked(event.target.checked)}
+            ></Checkbox>
+            我已阅读并同意
+            <span className="cursor-pointer" style={{ color: "#1790fe" }}>
+              《清水河畔用户注册协议》
+            </span>
+          </Typography>
+          <div className="flex justify-between">
+            <Typography
+              className="my-8 cursor-pointer"
+              style={{ color: "#1790fe" }}
+            >
+              <Link to="/rebind">毕业生换绑</Link>
+            </Typography>
             <Typography
               className="my-8 cursor-pointer"
               style={{ color: "#1790fe" }}
@@ -125,20 +171,11 @@ const Register = (props) => {
               <Link to="/">已有帐号？</Link>
             </Typography>
           </div>
-          <div
-            style={{
-              transform: "scale(1.3157)",
-              transformOrigin: "0 0",
-              height: "103px",
-            }}
-          >
-            <ReCAPTCHA sitekey={site_key} onChange={onTokenChange} />
-          </div>
           <input
             type="submit"
             className="w-full my-2 py-3 text-white cursor-pointer"
             style={{ backgroundColor: "#1790fe", borderRadius: "4px" }}
-            value="登  录"
+            value="注  册"
           />
         </form>
       </Box>

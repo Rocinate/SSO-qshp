@@ -13,7 +13,7 @@ export default defineConfig({
   server: {
     port: 5700,
     proxy: {
-      '/dev' : 'http://bbs.abrac.site/api/',
+      '/dev' : 'http://bbs.abrac.site/star/',
     }
   },
 })
