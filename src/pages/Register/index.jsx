@@ -1,6 +1,9 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+
+import { motion } from "framer-motion";
+import { pageMotion } from "@/utils/pageMotion";
 import {
   Box,
   Typography,
@@ -48,6 +51,11 @@ const Register = (props) => {
     };
   }, []);
   return (
+    <motion.div
+      initial="initial"
+      animate="animate"
+      variants={pageMotion}
+    >
     <Box style={{ width: "400px" }}>
       <div className="flex justify-center">
         <Box className="mb-4">
@@ -180,6 +188,7 @@ const Register = (props) => {
         </form>
       </Box>
     </Box>
+    </motion.div>
   );
 };
 

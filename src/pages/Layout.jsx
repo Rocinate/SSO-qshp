@@ -2,6 +2,7 @@ import { LinearProgress } from "@mui/material";
 import { useState } from "react";
 import bgImg from "@/assets/login-bg1.jpg";
 import { Routes, Route, useLocation } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 import routes from "@/route";
 
 const Clause = () => {
@@ -18,6 +19,7 @@ const Clause = () => {
 
 const Layout = () => {
   const [loading, setLoading] = useState(false);
+  const location = useLocation()
 
   return (
     <div className="flex h-full">
@@ -35,11 +37,17 @@ const Layout = () => {
         <div style={{ borderRadius: "4px" }} className="overflow-hidden">
           {loading ? <LinearProgress /> : <></>}
           <div className="relative z-10 bg-white p-11 box-border transition-all">
-            <Routes>
-              {routes.map(({ path, component: Component }) => (
-                <Route path={path} element={<Component />} key={path} />
-              ))}
-            </Routes>
+            <AnimatePresence mode="wait">
+              <Routes location={location} key={location.pathname}>
+                {routes.map(({ path, component: Component }) => (
+                  <Route
+                    path={path}
+                    element={<Component setLoading={setLoading} />}
+                    key={path}
+                  />
+                ))}
+              </Routes>
+            </AnimatePresence>
           </div>
         </div>
         <Clause />
