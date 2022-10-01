@@ -1,34 +1,19 @@
-
-
-import About from "@/pages/About/About";
-import Home from "@/pages/Home/Home";
-import Login from "@/pages/Login/Login";
-import NotFound from '@/pages/ErrorPage/NotFound'
+import Register from '@/pages/Register'
+import Login from "@/pages/Login";
+import Rebind from "@/pages/Rebind"
 
 const routes = [
     {
-      path: "/",
-      component: Home,
+      path: '/',
+      component: Login
     },
     {
-      path: "/login",
-      component: Login,
+      path: "/register",
+      component: Register,
     },
     {
-      path: "/about",
-      component: About,
-    },
-    // {
-    //   path: "/edit",
-    //   component: Edit,
-    // },
-    // {
-    //   path: "/article",
-    //   component: Article,
-    // },
-    {
-      path: '*',
-      component: NotFound
+      path: "/rebind",
+      component: Rebind
     }
   ];
 

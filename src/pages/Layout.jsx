@@ -1,10 +1,8 @@
-import { Typography, Box, LinearProgress } from "@mui/material";
+import { LinearProgress } from "@mui/material";
 import { useState } from "react";
-import { useQuery } from "react-query";
 import bgImg from "@/assets/login-bg1.jpg";
-import Form from "./Form";
-import UserList from "./UserList";
-import SwipeableViews from "react-swipeable-views";
+import { Routes, Route, useLocation } from "react-router-dom";
+import routes from '@/route'
 
 const Clause = () => {
   return (
@@ -18,17 +16,8 @@ const Clause = () => {
   );
 };
 
-const Login = () => {
-  const [progress, setProgress] = useState(0);
-  const [userList, setUserList] = useState([1, 2, 3]);
-
-  const login = (data) => {
-    console.log(data)
-  };
-
-  const chooseUser = (data) => {
-    console.log(data);
-  };
+const Layout = () => {
+  const [loading, setLoading] = useState(false)
 
   return (
     <div className="flex h-full">
@@ -43,20 +32,20 @@ const Login = () => {
           <div className="w-full h-full blur-sm bg-opacity-10 bg-black"></div>
         </div>
 
-        <div style={{ borderRadius: "4px" }} className='overflow-hidden'>
-          <LinearProgress />
-          <div className="relative z-10 bg-white p-11 box-border">
-            <SwipeableViews index={progress} style={{ width: "400px" }}>
-              <Form login={login} />
-              <UserList data={userList} choose={chooseUser} />
-            </SwipeableViews>
+        <div style={{ borderRadius: "4px" }} className="overflow-hidden">
+          {loading ? <LinearProgress /> : <></>}
+          <div className="relative z-10 bg-white p-11 box-border transition-all">
+            <Routes>
+              {routes.map(({ path, component: Component }) => (
+                <Route path={path} element={<Component />} key={path} />
+              ))}
+            </Routes>
           </div>
         </div>
-
         <Clause />
       </div>
     </div>
   );
 };
 
-export default Login;
+export default Layout;

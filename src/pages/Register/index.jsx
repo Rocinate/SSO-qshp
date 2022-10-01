@@ -15,7 +15,7 @@ import { Person, Https, Visibility, VisibilityOff } from "@mui/icons-material";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useEffect } from "react";
 
-const Form = (props) => {
+const Register = (props) => {
   const { login } = props;
 
   const [tab, setTab] = useState("1");
@@ -45,9 +45,8 @@ const Form = (props) => {
       useRecaptchaNet: true,
     };
   }, []);
-
   return (
-    <>
+    <Box style={{ width: "400px" }}>
       <div className="flex justify-center">
         <Box className="mb-4">
           <Typography gutterBottom variant="h3">
@@ -64,12 +63,7 @@ const Form = (props) => {
           <Tabs value={tab} onChange={handleTabChange} centered>
             <Tab
               value="1"
-              label={<Typography>统一身份认证</Typography>}
-              className="font-extrabold"
-            />
-            <Tab
-              value="2"
-              label={<Typography>账号密码登录</Typography>}
+              label={<Typography>注册</Typography>}
               className="font-extrabold"
             />
           </Tabs>
@@ -119,17 +113,16 @@ const Form = (props) => {
             />
           </div>
           <div className="flex justify-between pb-4">
+              <Typography
+                className="my-8 "
+              >
+                我同意<span className="cursor-pointer" style={{ color: "#1790fe" }}></span>
+              </Typography>
             <Typography
               className="my-8 cursor-pointer"
               style={{ color: "#1790fe" }}
             >
-              <Link to='/register'>注册</Link>
-            </Typography>
-            <Typography
-              className="my-8 cursor-pointer"
-              style={{ color: "#1790fe" }}
-            >
-              忘记密码 ?
+              <Link to="/">已有帐号？</Link>
             </Typography>
           </div>
           <div
@@ -149,8 +142,8 @@ const Form = (props) => {
           />
         </form>
       </Box>
-    </>
+    </Box>
   );
 };
 
-export default Form;
+export default Register;

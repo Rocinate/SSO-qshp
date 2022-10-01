@@ -15,7 +15,7 @@ import { Person, Https, Visibility, VisibilityOff } from "@mui/icons-material";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useEffect } from "react";
 
-const Form = (props) => {
+const Register = (props) => {
   const { login } = props;
 
   const [tab, setTab] = useState("1");
@@ -23,9 +23,6 @@ const Form = (props) => {
   const [token, setToken] = useState(null);
   const { register, handleSubmit } = useForm();
 
-  const site_key = import.meta.env.PROD
-    ? import.meta.env.VITE_RECAPTCHA_KEY_PRODUCTION
-    : import.meta.env.VITE_RECAPTCHA_KEY;
   // const { isLoading, isSuccess, isError, data, error} = useQuery('login', login, )
 
   const handleTabChange = (event, value) => {
@@ -45,9 +42,8 @@ const Form = (props) => {
       useRecaptchaNet: true,
     };
   }, []);
-
   return (
-    <>
+    <Box style={{ width: "400px" }}>
       <div className="flex justify-center">
         <Box className="mb-4">
           <Typography gutterBottom variant="h3">
@@ -59,17 +55,11 @@ const Form = (props) => {
         </Box>
       </div>
       <Box className="overflow-hidden">
-        {/* <Box className="p-11 bg-white shadow-md" style={{ width: "440px" }}> */}
         <Box className="border-b border-b-slate-300">
           <Tabs value={tab} onChange={handleTabChange} centered>
             <Tab
               value="1"
-              label={<Typography>统一身份认证</Typography>}
-              className="font-extrabold"
-            />
-            <Tab
-              value="2"
-              label={<Typography>账号密码登录</Typography>}
+              label={<Typography>换绑</Typography>}
               className="font-extrabold"
             />
           </Tabs>
@@ -118,39 +108,16 @@ const Form = (props) => {
               {...register("password")}
             />
           </div>
-          <div className="flex justify-between pb-4">
-            <Typography
-              className="my-8 cursor-pointer"
-              style={{ color: "#1790fe" }}
-            >
-              <Link to='/register'>注册</Link>
-            </Typography>
-            <Typography
-              className="my-8 cursor-pointer"
-              style={{ color: "#1790fe" }}
-            >
-              忘记密码 ?
-            </Typography>
-          </div>
-          <div
-            style={{
-              transform: "scale(1.3157)",
-              transformOrigin: "0 0",
-              height: "103px",
-            }}
-          >
-            <ReCAPTCHA sitekey={site_key} onChange={onTokenChange} />
-          </div>
           <input
             type="submit"
             className="w-full my-2 py-3 text-white cursor-pointer"
             style={{ backgroundColor: "#1790fe", borderRadius: "4px" }}
-            value="登  录"
+            value="更 换"
           />
         </form>
       </Box>
-    </>
+    </Box>
   );
 };
 
-export default Form;
+export default Register;
