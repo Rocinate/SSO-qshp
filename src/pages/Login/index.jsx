@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { authenticate, signIn } from "@/apis/login";
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion";
 import { pageMotion } from "@/utils/pageMotion";
 
 import Form from "./Form";
@@ -14,9 +14,9 @@ const Login = ({ navigation, setLoading }) => {
   const [errorText, setErrorText] = useState("");
 
   const login = (data, token) => {
-    // authenticate(data,75868)
-    // signIn(data,43654)
-    setLoading(true);
+      setLoading(true);
+      authenticate(data,token)
+      signIn(data,token)
     console.log(data);
   };
 
@@ -25,16 +25,16 @@ const Login = ({ navigation, setLoading }) => {
   };
 
   return (
-    <motion.div
-      initial="initial"
-      animate="animate"
-      variants={pageMotion}
-    >
+    // <motion.div
+    //   initial="initial"
+    //   animate="animate"
+    //   variants={pageMotion}
+    // >
       <SwipeableViews index={progress} style={{ width: "400px" }}>
         <Form login={login} errorText={errorText} setErrorText={setErrorText} />
         <UserList data={userList} choose={chooseUser} />
       </SwipeableViews>
-    </motion.div>
+    // </motion.div>
   );
 };
 

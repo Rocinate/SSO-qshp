@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { LinkWithSearch } from "../Components/LinkWithSearch";
 import LoadingButton from "@mui/lab/LoadingButton";
 import {
   Box,
@@ -38,6 +38,7 @@ const Form = (props) => {
 
   const onTokenChange = (value) => {
     setToken(value);
+    setErrorText("")
   };
 
   const handleLogin = (data) => {
@@ -45,7 +46,11 @@ const Form = (props) => {
       setErrorText("请先进行人机身份认证");
       return;
     }
-    login(data, token);
+    login(Object.assign(data, {
+      type: tab,
+      app_id: 1,
+      redirect: localStorage.getItem("redirect")
+    }), token);
   };
 
   useEffect(() => {
@@ -136,18 +141,18 @@ const Form = (props) => {
           <div className="flex justify-between pt-2 pb-4">
             <Typography className="my-8 cursor-pointer">
               <span style={{ color: "#1790fe" }}>
-                <Link to="/register">注册</Link>
+                <LinkWithSearch to="/register">注册</LinkWithSearch>
               </span>{" "}
               /{" "}
               <span style={{ color: "#1790fe" }}>
-                <Link to="/rebind">毕业生换绑</Link>
+                <LinkWithSearch to="/rebind">毕业生换绑</LinkWithSearch>
               </span>
             </Typography>
             <Typography
               className="my-8 cursor-pointer"
               style={{ color: "#1790fe" }}
             >
-              忘记密码 ?
+              <LinkWithSearch to="/reset">忘记密码 ?</LinkWithSearch>
             </Typography>
           </div>
           <LoadingButton
