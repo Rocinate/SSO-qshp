@@ -38,7 +38,7 @@ const Form = (props) => {
 
   const onTokenChange = (value) => {
     setToken(value);
-    setErrorText("")
+    setErrorText("");
   };
 
   const handleLogin = (data) => {
@@ -46,11 +46,14 @@ const Form = (props) => {
       setErrorText("请先进行人机身份认证");
       return;
     }
-    login(Object.assign(data, {
-      type: tab,
-      app_id: 1,
-      redirect: localStorage.getItem("redirect")
-    }), token);
+    login(
+      Object.assign(data, {
+        type: tab,
+        app_id: 1,
+        redirect: localStorage.getItem("redirect"),
+      }),
+      token
+    );
   };
 
   useEffect(() => {

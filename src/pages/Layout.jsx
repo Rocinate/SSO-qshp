@@ -1,4 +1,4 @@
-import { LinearProgress } from "@mui/material";
+import { LinearProgress, Fade, Box } from "@mui/material";
 import { useState } from "react";
 import bgImg from "@/assets/login-bg.jpg";
 import { Routes, Route, useLocation, useSearchParams } from "react-router-dom";
@@ -14,6 +14,14 @@ const Clause = () => {
       <p className="mx-2 cursor-pointer">使用条款</p>
       <p className="mx-2 cursor-pointer">隐私和cookie</p>
     </div>
+  );
+};
+
+const TransitionWrapper = ({ children }) => {
+  return (
+    <Fade in={true}>
+      <Box style={{width: '400px'}}>{children}</Box>
+    </Fade>
   );
 };
 
@@ -42,12 +50,15 @@ const Layout = () => {
               {routes.map(({ path, component: Component }) => (
                 <Route
                   path={path}
-                  element={<Component setLoading={setLoading} />}
+                  element={
+                    <TransitionWrapper>
+                      <Component setLoading={setLoading} />
+                    </TransitionWrapper>
+                  }
                   key={path}
                 />
               ))}
             </Routes>
-            {/* </AnimatePresence> */}
           </div>
         </div>
         <Clause />

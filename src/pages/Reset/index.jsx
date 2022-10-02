@@ -1,5 +1,7 @@
+import { Box } from '@mui/material'
+
 const Reset = () => {
-    return <div>31231223</div>
+    return <Box><div>123</div></Box>
 }
 
 export default Reset
