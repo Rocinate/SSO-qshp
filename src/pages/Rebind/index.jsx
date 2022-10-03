@@ -18,7 +18,7 @@ import { useEffect } from "react";
 const Register = (props) => {
   const { login } = props;
 
-  const [tab, setTab] = useState("1");
+  const [tab, setTab] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
   const [token, setToken] = useState(null);
   const { register, handleSubmit } = useForm();
@@ -61,7 +61,7 @@ const Register = (props) => {
         <Box className="border-b border-b-slate-300">
           <Tabs value={tab} onChange={handleTabChange} centered>
             <Tab
-              value="1"
+              value={1}
               label={<Typography>换绑</Typography>}
               className="font-extrabold"
             />

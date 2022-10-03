@@ -49,8 +49,7 @@ const Form = (props) => {
     login(
       Object.assign(data, {
         type: tab,
-        app_id: 1,
-        redirect: localStorage.getItem("redirect"),
+        app_id: 1
       }),
       token
     );

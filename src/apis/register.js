@@ -3,7 +3,7 @@ import request from '@/utils/request';
 const commonUrl = 'register'
 
 export const checkUsername = async (params) => {
-    delete axios.defaults.headers.common["reCAPTCHA"];
+    delete request.defaults.headers.common["reCAPTCHA"];
     return await request.post(`${commonUrl}/check-username}`, params)
 }
 

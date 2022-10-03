@@ -9,35 +9,21 @@ const service = axios.create({
   },
 });
 
-// /**
-//  * 响应拦截器
-//  * @param { object } response 响应参数
-//  */
-// service.interceptors.response.use(
-//   (response) => {
-//     if (response.status === statusCode.responseSuccess) {
-//       return response.data;
-//     } else {
-//       return response.data;
-//     }
-//   },
-//   (error) => {
-//     if (error) {
-//       if (error.response) {
-//         let httpError = {
-//           hasError: true,
-//           status: error.response.status,
-//           statusText: error.response.statusText,
-//         };
-//         errorHandle(httpError.status, httpError.statusText);
-//       } else {
-//         // show toast
-//       }
-//       return Promise.reject(error);
-//     } else {
-//       // show toast
-//     }
-//   }
-// );
+/**
+ * 响应拦截器
+ * @param { object } response 响应参数
+ */
+service.interceptors.response.use(
+  (response) => {
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      return Promise.reject(response)
+    }
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 export default service;

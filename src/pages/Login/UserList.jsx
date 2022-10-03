@@ -12,10 +12,6 @@ import {
 const UserList = (props) => {
   const { data, chooseUser } = props;
 
-  const handleClick = (user) => {
-    chooseUser(user)
-  }
-
   return (
     <>
       <Box className="mx-auto border-b border-b-slate-300">
@@ -28,14 +24,14 @@ const UserList = (props) => {
         <List sx={{ width: "100%" }}>
           {data.map((user) => (
             <ListItem alignItems="flex-start" key={user}>
-              <ListItemButton>
+              <ListItemButton onClick={() => {chooseUser(user.uid)}}>
                 <ListItemAvatar>
                   <Avatar
                     alt="avatar"
-                    src="https://mui.com/static/images/avatar/3.jpg"
+                    src={user.avatar}
                   />
                 </ListItemAvatar>
-                <ListItemText>12312</ListItemText>
+                <ListItemText>{user.username}</ListItemText>
               </ListItemButton>
             </ListItem>
           ))}
