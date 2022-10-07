@@ -9,6 +9,12 @@ function App() {
   const [searchParams, setSearchParams] = useSearchParams()
 
   useEffect(() => {
+    window.recaptchaOptions = {
+      useRecaptchaNet: true,
+    };
+  }, []);
+
+  useEffect(() => {
     const redirect = searchParams.get("redirect")
     // 默认跳转设定
     if (!redirect || redirect.indexOf("bbs")==-1) {

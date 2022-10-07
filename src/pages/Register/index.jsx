@@ -1,6 +1,8 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { LinkWithSearch } from "../Components/LinkWithSearch";
+import { signUp, checkUsername } from "@/apis/register";
+import Agreement from '@/pages/Clause/Agreement'
 import {
   Box,
   Typography,
@@ -11,24 +13,28 @@ import {
   InputAdornment,
   Checkbox,
 } from "@mui/material";
-import { Person, Https, Visibility, VisibilityOff } from "@mui/icons-material";
+import {
+  Person,
+  Https,
+  Visibility,
+  VisibilityOff,
+  Email,
+} from "@mui/icons-material";
 
 import ReCAPTCHA from "react-google-recaptcha";
-import { useEffect } from "react";
 
-const Register = (props) => {
-  const { login } = props;
-
+const Register = ({ setLoading, loading }) => {
   const [tab, setTab] = useState("1");
   const [showPassword, setShowPassword] = useState(false);
   const [token, setToken] = useState(null);
   const [checked, setChecked] = useState(false);
   const { register, handleSubmit } = useForm();
+  const [errorText, setErrorText] = useState("");
+  const [agreementShow, setAgreementShow] = useState(false)
 
   const site_key = import.meta.env.PROD
     ? import.meta.env.VITE_RECAPTCHA_KEY_PRODUCTION
     : import.meta.env.VITE_RECAPTCHA_KEY;
-  // const { isLoading, isSuccess, isError, data, error} = useQuery('login', login, )
 
   const handleTabChange = (event, value) => {
     setTab(value);
@@ -42,13 +48,27 @@ const Register = (props) => {
     setToken(value);
   };
 
-  useEffect(() => {
-    window.recaptchaOptions = {
-      useRecaptchaNet: true,
-    };
-  }, []);
+  const handleRegister = (data) => {
+    if (token == null) {
+      setErrorText("请先进行人机身份认证");
+      return;
+    } else if (!checked) {
+      setErrorText("请同意用户注册协议");
+      return;
+    }
+    setLoading(true);
+    signUp(data, token).then((res) => {
+      if (res.errcode === 0) {
+        setUserList(res.data.users);
+        setProgress(1);
+      }
+      setLoading(false);
+    });
+  };
+
   return (
     <>
+      <Agreement show={agreementShow} setShow={setAgreementShow}/>
       <div className="flex justify-center">
         <Box className="mb-4">
           <Typography gutterBottom variant="h3">
@@ -71,15 +91,10 @@ const Register = (props) => {
           </Tabs>
         </Box>
 
-        <form
-          onSubmit={handleSubmit((data) =>
-            login(Object.assign(data, { token: token }))
-          )}
-        >
+        <form onSubmit={handleSubmit((data) => handleRegister(data))}>
           <div className="py-2 pt-8">
             <TextField
               fullWidth
-              required
               label="学号"
               InputProps={{
                 startAdornment: (
@@ -88,13 +103,66 @@ const Register = (props) => {
                   </InputAdornment>
                 ),
               }}
-              {...register("user")}
+              {...register("student_id", { required: true })}
             />
           </div>
           <div className="py-2">
             <TextField
               fullWidth
-              required
+              label="统一身份认证密码"
+              type={showPassword ? "" : "password"}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Https />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={handlePasswordClick} edge="end">
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              {...register("student_password", { required: true })}
+            />
+          </div>
+          <div className="py-2">
+            <TextField
+              fullWidth
+              label="邮箱"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Email />
+                  </InputAdornment>
+                ),
+              }}
+              {...register("email", {
+                required: true,
+                pattern:
+                  /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/,
+              })}
+            />
+          </div>
+          <div className="py-2">
+            <TextField
+              fullWidth
+              label="用户名"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Person />
+                  </InputAdornment>
+                ),
+              }}
+              {...register("username", { required: true })}
+            />
+          </div>
+          <div className="py-2 pb-4">
+            <TextField
+              fullWidth
               label="密码"
               type={showPassword ? "" : "password"}
               InputProps={{
@@ -111,30 +179,7 @@ const Register = (props) => {
                   </InputAdornment>
                 ),
               }}
-              {...register("password")}
-            />
-          </div>
-          <div className="py-2 pb-4">
-            <TextField
-              fullWidth
-              required
-              label="邮箱"
-              type={showPassword ? "" : "password"}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Https />
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={handlePasswordClick} edge="end">
-                      {showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-              {...register("password")}
+              {...register("password", { required: true })}
             />
           </div>
           <div style={{ height: "102px" }}>
@@ -153,10 +198,11 @@ const Register = (props) => {
               onChange={(event) => setChecked(event.target.checked)}
             ></Checkbox>
             我已阅读并同意
-            <span className="cursor-pointer" style={{ color: "#1790fe" }}>
+            <span className="cursor-pointer" style={{ color: "#1790fe" }} onClick={() => setAgreementShow(true)}>
               《清水河畔用户注册协议》
             </span>
           </Typography>
+          <Typography className="text-red-500">{errorText}</Typography>
           <div className="flex justify-between">
             <Typography
               className="my-8 cursor-pointer"

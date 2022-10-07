@@ -1,18 +1,25 @@
 import { LinearProgress, Fade, Box } from "@mui/material";
 import { useState } from "react";
-import bgImg from "@/assets/login-bg.jpg";
-import { Routes, Route, useLocation, useSearchParams } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import routes from "@/route";
-import { useEffect } from "react";
+
+import bgImg from "@/assets/login-bg.jpg";
+import Privacy from '@/pages/Clause/Privacy'
+import Terms from '@/pages/Clause/Terms'
 
 const Clause = () => {
+  const [privacyShow, setPrivacyShow] = useState(false)
+  const [termsShow, setTermsShow] = useState(false)
+
   return (
     <div
-      className="absolute bottom-1 right-1 flex text-white"
-      style={{ fontSize: "14px" }}
+    className="absolute bottom-1 right-1 flex text-white"
+    style={{ fontSize: "14px" }}
     >
-      <p className="mx-2 cursor-pointer">使用条款</p>
-      <p className="mx-2 cursor-pointer">隐私和cookie</p>
+      <Privacy show={privacyShow} setShow={setPrivacyShow} />
+      <Terms show={termsShow} setShow={setTermsShow} />
+      <p className="mx-2 cursor-pointer" onClick={() => setTermsShow(true)}>使用条款</p>
+      <p className="mx-2 cursor-pointer" onClick={() => setPrivacyShow(true)}>隐私和cookie</p>
     </div>
   );
 };
@@ -45,14 +52,13 @@ const Layout = () => {
         <div style={{ borderRadius: "4px" }} className="overflow-hidden">
           {loading ? <LinearProgress /> : <></>}
           <div className="relative z-10 bg-white p-11 box-border transition-all">
-            {/* <AnimatePresence mode="wait"> */}
             <Routes location={location} key={location.pathname}>
               {routes.map(({ path, component: Component }) => (
                 <Route
                   path={path}
                   element={
                     <TransitionWrapper>
-                      <Component setLoading={setLoading} />
+                      <Component setLoading={setLoading} loading={loading} />
                     </TransitionWrapper>
                   }
                   key={path}

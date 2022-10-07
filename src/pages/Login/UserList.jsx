@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 
 const UserList = (props) => {
-  const { data, chooseUser } = props;
+  const { data, choose } = props;
 
   return (
     <>
@@ -24,7 +24,7 @@ const UserList = (props) => {
         <List sx={{ width: "100%" }}>
           {data.map((user) => (
             <ListItem alignItems="flex-start" key={user}>
-              <ListItemButton onClick={() => {chooseUser(user.uid)}}>
+              <ListItemButton onClick={() => {choose({uid: user.uid})}}>
                 <ListItemAvatar>
                   <Avatar
                     alt="avatar"

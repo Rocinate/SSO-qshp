@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { LinkWithSearch } from "../Components/LinkWithSearch";
+import { postgraduate } from '@/apis/rebind'
 import {
   Box,
   Typography,
@@ -13,10 +14,8 @@ import {
 import { Person, Https, Visibility, VisibilityOff } from "@mui/icons-material";
 
 import ReCAPTCHA from "react-google-recaptcha";
-import { useEffect } from "react";
 
-const Register = (props) => {
-  const { login } = props;
+const Rebind = ({loading, setLoading}) => {
 
   const [tab, setTab] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
@@ -26,7 +25,6 @@ const Register = (props) => {
   const site_key = import.meta.env.PROD
     ? import.meta.env.VITE_RECAPTCHA_KEY_PRODUCTION
     : import.meta.env.VITE_RECAPTCHA_KEY;
-  // const { isLoading, isSuccess, isError, data, error} = useQuery('login', login, )
 
   const handleTabChange = (event, value) => {
     setTab(value);
@@ -40,11 +38,21 @@ const Register = (props) => {
     setToken(value);
   };
 
-  useEffect(() => {
-    window.recaptchaOptions = {
-      useRecaptchaNet: true,
-    };
-  }, []);
+  const handleRebind = (data) => {
+    if (token == null) {
+      setErrorText("请先进行人机身份认证");
+      return;
+    }
+    setLoading(true);
+    postgraduate(data, token).then((res) => {
+      if (res.errcode === 0) {
+        setUserList(res.data.users);
+        setProgress(1);
+      }
+      setLoading(false);
+    });
+  }
+
   return (
     <>
       <div className="flex justify-center">
@@ -69,14 +77,11 @@ const Register = (props) => {
         </Box>
 
         <form
-          onSubmit={handleSubmit((data) =>
-            login(Object.assign(data, { token: token }))
-          )}
+          onSubmit={handleSubmit((data) => handleRebind(data))}
         >
           <div className="py-2 pt-8">
             <TextField
               fullWidth
-              required
               label="用户名"
               InputProps={{
                 startAdornment: (
@@ -85,13 +90,12 @@ const Register = (props) => {
                   </InputAdornment>
                 ),
               }}
-              {...register("username")}
+              {...register("username", { required: true })}
             />
           </div>
           <div className="py-2">
             <TextField
               fullWidth
-              required
               label="密码"
               type={showPassword ? "" : "password"}
               InputProps={{
@@ -162,7 +166,6 @@ const Register = (props) => {
           <div className="flex justify-between pt-2">
             <Typography
               className="my-8 cursor-pointer"
-              // style={{ color: "#1790fe" }}
             >
               <span style={{ color: "#1790fe" }}>
                 <LinkWithSearch to="/">已有帐号？</LinkWithSearch>
@@ -181,4 +184,4 @@ const Register = (props) => {
   );
 };
 
-export default Register;
+export default Rebind;

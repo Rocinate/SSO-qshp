@@ -55,12 +55,6 @@ const Form = (props) => {
     );
   };
 
-  useEffect(() => {
-    window.recaptchaOptions = {
-      useRecaptchaNet: true,
-    };
-  }, []);
-
   return (
     <>
       <div className="flex justify-center">
@@ -94,7 +88,6 @@ const Form = (props) => {
           <div className="py-2 pt-8">
             <TextField
               fullWidth
-              required
               label={tab == "1" ? "学号" : "用户名"}
               InputProps={{
                 startAdornment: (
@@ -103,13 +96,12 @@ const Form = (props) => {
                   </InputAdornment>
                 ),
               }}
-              {...register("user")}
+              {...register("user", { required: true })}
             />
           </div>
           <div className="py-2 pb-4">
             <TextField
               fullWidth
-              required
               label="密码"
               type={showPassword ? "" : "password"}
               InputProps={{
@@ -126,7 +118,7 @@ const Form = (props) => {
                   </InputAdornment>
                 ),
               }}
-              {...register("password")}
+              {...register("password", { required: true })}
             />
           </div>
           <div style={{ height: "102px" }}>
